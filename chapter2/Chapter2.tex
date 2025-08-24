@@ -1,0 +1,129 @@
+\chapter[State of art]{State of art}
+\label{Chap2}
+
+%herramientas similares
+%comparativas
+\section{Air Quality Forecasting and Chemical Transport Models (CTMs)}
+
+Air quality forecasting relies on the use of atmospheric models known as \textbf{Chemical Transport Models (CTMs)}, which simulate the emission, chemical transformation, transport, and deposition of pollutants in the atmosphere. 
+
+
+These models are typically driven by meteorological inputs such as wind, temperature, pressure, and humidity provided by numerical weather prediction systems. To enhance forecast accuracy, data assimilation techniques are used, incorporating observations from satellite instruments and ground-based monitoring networks into the model.
+
+\section{The Copernicus Atmosphere Monitoring Service (CAMS)}
+
+The \textbf{Copernicus Atmosphere Monitoring Service (CAMS)} currently operates two main forecasting systems, complemented by post-processing methods:
+
+\begin{itemize}
+	\item \textbf{Global System (IFS-COMPO)}: Based on ECMWF’s Integrated Forecasting System, extended with atmospheric composition modules. It produces analyses every six hours and 5-day forecasts at approximately 40 km horizontal resolution. 
+	
+	This system includes gases (O$_3$, CO, NO$_2$, SO$_2$), aerosols (dust, black carbon, sea salt), greenhouse gases (CO$_2$, CH$_4$), and the UV index, making it a comprehensive tool for global-scale atmospheric monitoring.
+	
+	\item \textbf{Regional Ensemble (Europe)}: A multi-model operational ensemble combining 11 state-of-the-art CTMs developed by different European institutes (e.g., CHIMERE, LOTOS-EUROS, SILAM, EMEP, MONARCH, DEHM, MATCH, MINNI, MOCAGE, EURAD-IM, GEM-AQ). Each model includes its own chemical schemes, aerosol parameterizations, and data assimilation strategies. Forecasts are produced daily for up to 4 days at approximately 5 km horizontal resolution. 
+	
+	The final product is the statistical median of the ensemble, which reduces biases and provides more robust and stable results than any single model alone.
+	
+	\item \textbf{CAMS-MOS (Model Output Statistics)}: A recent development applying machine learning and statistical post-processing to further refine forecasts. By using local ground observations and meteorological predictors, CAMS-MOS corrects systematic biases and improves near-surface concentration forecasts at monitoring station locations. 
+	
+	This approach enhances the usability of CAMS data at the local scale, though it is limited to sites with reliable observational coverage.
+\end{itemize}
+
+Together, these systems allow CAMS to provide a comprehensive suite of products, accessible via the Atmosphere Data Store (ADS), provided as multi-day hourly predictions, distributed via WMS/WCS services, APIs, or NetCDF files.
+
+\section{Evaluation and Validation of Air Quality Forecasts}
+\label{sec:evaluation}
+
+Reliable air quality forecasts are essential for public health protection, policy decision-making, and citizen engagement. Therefore, systematic evaluation and validation of forecasts is a critical component of CAMS operations. To support this, CAMS uses two complementary frameworks:
+
+\begin{itemize}
+	\item \textbf{Evaluation and Quality Control (EQC)}: Focused on continuous monitoring and statistical assessment of the forecasting outputs.
+	\item \textbf{Evaluation and Quality Assurance (EQA)}: Ensures that operational procedures and model outputs meet predetermined standards, improving robustness and long-term consistency.
+\end{itemize}
+
+\subsection{Observational Datasets for Validation}
+To validate model forecasts, CAMS compares outputs against independent observations from multiple sources:
+
+\begin{itemize}
+	\item Ground-based monitoring stations (European Environment Agency, EEA)
+	\item WMO-GAW global network and ozone sondes
+	\item Aircraft profile measurements (IAGOS)
+	\item AERONET sun photometer network for aerosols
+	\item Satellite observations (e.g. Sentinel-5P, MODIS, IASI)
+\end{itemize}
+
+\subsection{Standard Statistical Metrics}
+The following standard statistical metrics are commonly employed to quantify forecast accuracy:
+
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{p{2.5cm} p{5cm} p{6cm}}
+		\hline
+		\textbf{Metric} & \textbf{Description} & \textbf{Formula} \\
+		\hline
+		RMSE (Root Mean Square Error) & Emphasizes large forecast errors by penalizing greater deviations & 
+		$\mathrm{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (M_i - O_i)^2}$ \\
+		
+		MAE (Mean Absolute Error) & Measures the average magnitude of errors, regardless of direction & 
+		$\mathrm{MAE} = \frac{1}{N} \sum_{i=1}^{N} \left| M_i - O_i \right|$ \\
+		
+		Bias (MB) & Indicates systematic overestimation or underestimation & 
+		$\mathrm{Bias} = \frac{1}{N} \sum_{i=1}^{N} (M_i - O_i)$ \\
+		
+		Pearson Correlation (R) & Measures the strength of linear association between observed and forecast values & 
+		$R = \frac{\sum_{i=1}^{N} (M_i - \overline{M})(O_i - \overline{O})}{\sqrt{\sum_{i=1}^{N} (M_i - \overline{M})^2 \sum_{i=1}^{N} (O_i - \overline{O})^2}}$ \\
+		\hline
+	\end{tabular}
+	\caption{Standard statistical metrics used for forecast evaluation.}
+	\label{tab:stats_metrics}
+\end{table}
+
+\subsection{Advanced Scoreboard Metrics}
+
+Beyond the standard metrics, CAMS employs more nuanced metrics in its Scoreboard evaluation framework:
+
+\begin{itemize}
+	\item \textbf{Modified Normalized Mean Bias (MNMB)}: Reduces sensitivity to outliers by normalizing bias with respect to both observed and modeled values.
+	\[
+	\mathrm{MNMB} = \frac{1}{N} \sum_{i=1}^{N} \frac{M_i - O_i}{O_i + M_i},
+	\]
+	\item \textbf{Mean Absolute Bias (MAB)}: Focuses on the average magnitude of the bias.
+	\item \textbf{Fractional Gross Error (FGE)}: Evaluates forecast error proportionally to the sum of observed and modeled values.
+	\[
+	\mathrm{FGE} = \frac{1}{N} \sum_{i=1}^{N} \frac{ | M_i - O_i | }{ M_i + O_i },
+	\]
+	\item \textbf{Improvement / Deterioration Scores}: Metrics such as \emph{ADiffMB}, \emph{ADiffMAB}, and \emph{DiffR}, computed by comparing updated model versions against control runs to systematically track improvements or regressions in performance.
+	\[
+	\mathrm{MAB} = \frac{1}{N} \sum_{i=1}^{N} \frac{|M_i - O_i|}{O_i + M_i},
+	\]
+	
+\end{itemize}
+
+These evaluations are published quarterly in CAMS validation reports, which include comprehensive statistical analyses, visual comparisons, and long-term performance monitoring. For example, reanalysis products (such as CAMS EAC4) are assessed against AERONET aerosol optical depth datasets, providing insights into multi-year biases and trends.
+
+
+
+
+% Opcional: Cita al documento donde se describen estas métricas.
+% \cite{CAMS_SC1_Scoring_2023}
+
+\section{Platforms for Dissemination and Accessibility}
+CAMS forecasts are disseminated through multiple platforms with different levels of accessibility:
+\begin{itemize}
+	\item Windy.com: Interactive global maps including CAMS layers. Highly intuitive but limited access to raw data or pollutant-specific analytics.
+	\item CAMS Atmosphere Data Store (ADS): Provides full forecast datasets (NetCDF, GRIB) for expert users, enabling deep data analysis.
+	\item CAMS Regional Viewer: Map-based interface for European pollutants; simpler than ADS but still limited in interactivity.
+	\item OpenAQ: Real-time observational data from monitoring stations worldwide; focuses on measurements rather than forecasts, useful for validation purposes.
+\end{itemize}
+Public-facing platforms emphasize usability but limit scientific depth, whereas scientific portals provide comprehensive data at the cost of accessibility. Bridging this gap motivates the development of user-friendly, scientifically robust visualization tools.
+
+\section{Challenges and Open Gaps}
+
+Air quality forecasting has advanced significantly through the use of ensemble CTMs, meteorological data assimilation, and systematic validation. Despite these advances, challenges remain in forecast accuracy, evaluation complexity, and accessibility of high-quality data for non-expert users.
+This work addresses these gaps by developing a web-based tool with two main objectives:
+\begin{itemize}
+	\item Data exploration and visualization: The tool allows users to view CAMS forecast data in both map form and time-series plots for specific geographic coordinates (latitude and longitude), enabling deeper understanding of temporal pollutant variations.
+	\item Data accessibility and integration analysis: Since CAMS provides open access to forecast datasets through WMS/WCS services, APIs, and downloadable NetCDF files, this project investigates how to access, retrieve, and process these data sources efficiently. Additionally, it evaluates the different options for representing, visualizing, and summarizing the data, providing insights into potential integration within commercial or environmental service platforms.
+\end{itemize}
+By combining interactive visualization, data retrieval strategies, and analytical representation, this project demonstrates how CAMS data can be made accessible, interpretable, and actionable, both for public awareness and for potential use in business or environmental monitoring services.
+
