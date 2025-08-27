@@ -1,8 +1,126 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
-\bibitem{lorenzi2011inpainting}
-L.~Lorenzi, F.~Melgani, and G.~Mercier, ``Inpainting strategies for
-  reconstruction of missing data in vhr images,'' {\em IEEE Geoscience and
-  remote sensing letters}, vol.~8, no.~5, pp.~914--918, 2011.
+\bibitem{world2021global}
+W.~H. Organization {\em et~al.}, {\em WHO global air quality guidelines:
+  particulate matter (PM2. 5 and PM10), ozone, nitrogen dioxide, sulfur dioxide
+  and carbon monoxide}.
+\newblock World Health Organization, 2021.
+
+\bibitem{nishida2022impact}
+C.~Nishida and K.~Yatera, ``The impact of ambient environmental and
+  occupational pollution on respiratory diseases,'' {\em International journal
+  of environmental research and public health}, vol.~19, no.~5, p.~2788, 2022.
+
+\bibitem{rajagopalan2021pollution}
+S.~Rajagopalan and P.~J. Landrigan, ``Pollution and the heart,'' {\em New
+  England Journal of Medicine}, vol.~385, no.~20, pp.~1881--1892, 2021.
+
+\bibitem{watson2016impact}
+L.~Watson, G.~Lacressonni{\`e}re, M.~Gauss, M.~Engardt, C.~Andersson, B.~Josse,
+  V.~Mar{\'e}cal, A.~Nyiri, S.~Sobolowski, G.~Siour, {\em et~al.}, ``Impact of
+  emissions and+ 2 c climate change upon future ozone and nitrogen dioxide over
+  europe,'' {\em Atmospheric environment}, vol.~142, pp.~271--285, 2016.
+
+\bibitem{fuzzi2015particulate}
+S.~Fuzzi, U.~Baltensperger, K.~Carslaw, S.~Decesari, H.~Denier van~der Gon,
+  M.~C. Facchini, D.~Fowler, I.~Koren, B.~Langford, U.~Lohmann, {\em et~al.},
+  ``Particulate matter, air quality and climate: lessons learned and future
+  needs,'' {\em Atmospheric chemistry and physics}, vol.~15, no.~14,
+  pp.~8217--8299, 2015.
+
+\bibitem{whoAmbientoutdoor}
+``{A}mbient (outdoor) air pollution --- who.int.''
+  \url{https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health}.
+\newblock [Accessed 27-08-2025].
+
+\bibitem{whoTypesPollutants}
+``{T}ypes of pollutants --- who.int.''
+  \url{https://www.who.int/teams/environment-climate-change-and-health/air-quality-and-health/health-impacts/types-of-pollutants}.
+\newblock [Accessed 27-08-2025].
+
+\bibitem{cao2025short}
+W.~Cao, H.~Huang, Z.~Chang, Z.~Liang, H.~Li, Z.~Cheng, and B.~Sun, ``Short-term
+  air pollution exposure and risk of respiratory pathogen infections: an
+  11-year case-crossover study in guangzhou, china,'' {\em BMC Public Health},
+  vol.~25, no.~1, p.~1411, 2025.
+
+\bibitem{liu2021long}
+S.~Liu, J.~T. J{\o}rgensen, P.~Ljungman, G.~Pershagen, T.~Bellander,
+  K.~Leander, P.~K. Magnusson, D.~Rizzuto, U.~A. Hvidtfeldt,
+  O.~Raaschou-Nielsen, {\em et~al.}, ``Long-term exposure to low-level air
+  pollution and incidence of asthma: the elapse project,'' {\em European
+  Respiratory Journal}, vol.~57, no.~6, 2021.
+
+\bibitem{zheng2021short}
+X.-y. Zheng, P.~Orellano, H.-l. Lin, M.~Jiang, and W.-j. Guan, ``Short-term
+  exposure to ozone, nitrogen dioxide, and sulphur dioxide and emergency
+  department visits and hospital admissions due to asthma: A systematic review
+  and meta-analysis,'' {\em Environment international}, vol.~150, p.~106435,
+  2021.
+
+\bibitem{tiotiu2020impact}
+A.~I. Tiotiu, P.~Novakova, D.~Nedeva, H.~J. Chong-Neto, S.~Novakova,
+  P.~Steiropoulos, and K.~Kowal, ``Impact of air pollution on asthma
+  outcomes,'' {\em International journal of environmental research and public
+  health}, vol.~17, no.~17, p.~6212, 2020.
+
+\bibitem{zarkeba2024relationship}
+{\L}.~Zar{\k{e}}ba, K.~Piszczatowska, K.~D{\.z}aman, K.~Soroczynska,
+  P.~Motamedi, M.~J. Szczepa{\'n}ski, and N.~Ludwig, ``The relationship between
+  fine particle matter (pm2. 5) exposure and upper respiratory tract
+  diseases,'' {\em Journal of Personalized Medicine}, vol.~14, no.~1, p.~98,
+  2024.
+
+\bibitem{xie2021toxicity}
+W.~Xie, J.~You, C.~Zhi, and L.~Li, ``The toxicity of ambient fine particulate
+  matter (pm2. 5) to vascular endothelial cells,'' {\em Journal of Applied
+  Toxicology}, vol.~41, no.~5, pp.~713--723, 2021.
+
+\bibitem{thangavel2022recent}
+P.~Thangavel, D.~Park, and Y.-C. Lee, ``Recent insights into particulate matter
+  (pm2. 5)-mediated toxicity in humans: an overview,'' {\em International
+  journal of environmental research and public health}, vol.~19, no.~12,
+  p.~7511, 2022.
+
+\bibitem{agathokleous2020ozone}
+E.~Agathokleous, Z.~Feng, E.~Oksanen, P.~Sicard, Q.~Wang, C.~J. Saitanis,
+  V.~Araminiene, J.~D. Blande, F.~Hayes, V.~Calatayud, {\em et~al.}, ``Ozone
+  affects plant, insect, and soil microbial communities: A threat to
+  terrestrial ecosystems and biodiversity,'' {\em Science advances}, vol.~6,
+  no.~33, p.~eabc1176, 2020.
+
+\bibitem{europaQualityEurope}
+``{A}ir quality in {E}urope 2022 --- eea.europa.eu.''
+  \url{https://www.eea.europa.eu/en/analysis/publications/air-quality-in-europe-2022}.
+\newblock [Accessed 27-08-2025].
+
+\bibitem{copernicusCopernicus}
+``{C}opernicus --- atmosphere.copernicus.eu.''
+  \url{https://atmosphere.copernicus.eu/}.
+\newblock [Accessed 27-08-2025].
+
+\bibitem{ecmwfECMWF}
+``{E}{C}{M}{W}{F} --- ecmwf.int.'' \url{https://www.ecmwf.int/}.
+\newblock [Accessed 27-08-2025].
+
+\bibitem{raub2000carbon}
+J.~A. Raub, M.~Mathieu-Nolf, N.~B. Hampson, and S.~R. Thom, ``Carbon monoxide
+  poisoning—a public health perspective,'' {\em Toxicology}, vol.~145, no.~1,
+  pp.~1--14, 2000.
+
+\bibitem{wyer2022ammonia}
+K.~E. Wyer, D.~B. Kelleghan, V.~Blanes-Vidal, G.~Schauberger, and T.~P. Curran,
+  ``Ammonia emissions from agriculture and their contribution to fine
+  particulate matter: A review of implications for human health,'' {\em Journal
+  of Environmental Management}, vol.~323, p.~116285, 2022.
+
+\bibitem{lelieveld1993climate}
+J.~Lelieveld, P.~Crutzen, and C.~Br{\"u}hl, ``Climate effects of atmospheric
+  methane,'' {\em Chemosphere}, vol.~26, no.~1-4, pp.~739--768, 1993.
+
+\bibitem{ebi2008climate}
+K.~L. Ebi and G.~McGregor, ``Climate change, tropospheric ozone and particulate
+  matter, and health impacts,'' {\em Environmental health perspectives},
+  vol.~116, no.~11, pp.~1449--1455, 2008.
 
 \end{thebibliography}
