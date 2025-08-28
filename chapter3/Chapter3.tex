@@ -122,16 +122,119 @@ The platform provides hourly forecasts of atmospheric pollutants, enabling users
 
 The first key component is the time slider, which allows the user to select the forecast hour they wish to inspect. The application automatically calculates the range of available forecast hours based on the current UTC time and a forecast horizon of four days. For each hour within this range, an ISO-formatted timestamp is generated and associated with a position on the slider. When users select a global forecast, the application rounds the chosen hour to the nearest multiple of three, reflecting the temporal resolution of the global CAMS forecasts. The slider also displays labels that indicate the day of the forecast, providing an intuitive reference so users can easily identify which hours correspond to which day.
 
+
+\section{Conversion of Pollutant Values}
+
+Some of the data layers were not given in \(\mu g/m^3\) (micrograms per cubic meter), but in ppbv (parts per billion by volume).  
+To standardize the units, a pollutant-specific conversion factor was applied.  
+
+These factors are derived from the relationship between volumetric concentration and mass using the ideal gas law:
+
+\[
+C_{\mu g/m^3} = C_{ppbv} \times \frac{M \cdot P}{R \cdot T} \cdot 10^3
+\]
+
+where:
+\begin{itemize}
+	\item \(C_{\mu g/m^3}\) = concentration in micrograms per cubic meter (\(\mu g/m^3\))  
+	\item \(C_{ppbv}\) = concentration in parts per billion by volume (ppbv)  
+	\item \(M\) = molar mass of the pollutant (g/mol)  
+	\item \(P\) = pressure (Pa)  
+	\item \(R\) = universal gas constant \(8.314\,\mathrm{J/(mol\cdot K)}\)  
+	\item \(T\) = absolute temperature (K)  
+\end{itemize}
+
+The factors used in the code were calculated assuming standard pressure and temperature conditions (\(P = 101325\,Pa\), \(T = 298\,K\)) and applying the equation above.  
+
+\textbf{Note on temperature:} \(T = 298\,K\) corresponds to approximately \(25\,^\circ C\).
+
+
+For example, for \(\mathrm{NO_2}\):
+
+\[
+\mathrm{NO_2\ Factor} = \frac{46.0055\,[g/mol] \cdot 101325\,[Pa]}{8.314\,[J/(mol\cdot K)] \cdot 298\,[K]} \cdot 10^{-3} \approx 1.9125
+\]
+
+This means that each ppbv of NO\(_2\) corresponds approximately to \(1.9125\,\mu g/m^3\).  
+
+The code that performs the conversion is:
+
+\lstdefinelanguage{JavaScript}{
+	keywords={break, case, catch, class, const, continue, debugger, default, delete, do, else, export, extends, finally, for, function, if, import, in, instanceof, let, new, return, super, switch, this, throw, try, var, while, with, yield},
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]",
+	morestring=[b]'
+}
+\begin{lstlisting}[caption={Conversion of pollutant values to \(\mu g/m^3\)}]
+	function convertPollutantValue(pollutant, rawValue) {
+		let value = parseFloat(rawValue);
+		let unit = "ug/m3"; 
+		
+		switch (pollutant) {
+			case "NO2": value = value * 1.9125; break;
+			case "SO2": value = value * 2.6609; break;
+			case "CO":  value = value * 1.1642; break;
+			case "CO2": value = value * 1.829; break;
+			case "CH4": value = value * 0.666; break;
+			case "O3":  value = value * 1.9957; break;
+			default: value = value * 1; break;
+		}
+		
+		return { value: Math.round(value * 100)/100, unit };
+	}
+\end{lstlisting}
+
+Each factor in the code corresponds to the calculation shown for NO\(_2\), adjusted for the molar mass of each pollutant. This ensures all values are in the same unit (\(\mu g/m^3\)) for consistent analysis and comparison.
+
 \section{Dynamic Layer Updating}
 
 Whenever the user changes the selected region, pollutant, or forecast hour, the function \texttt{actualizarCapa()} is triggered. This function is responsible for updating the map with the correct pollutant layer for the chosen time. It first computes the exact time to request from the CAMS servers, taking into account region-specific rounding rules. Using the service URL provided by CAMS, it then constructs a WMS GetMap request, specifying the layer corresponding to the selected pollutant. If a color gradient style is defined for that pollutant, it is included in the request to ensure a meaningful visual representation. Before adding the new layer to the map, any previous pollutant layer is removed, ensuring that only the selected forecast is visible. The map legend is also updated at this point, reflecting the pollutant’s concentration range and the color mapping used to represent different values.
 
+
+\begin{lstlisting}[caption={Updating the map layer for the selected pollutant and hour}]
+	function actualizarCapa() {
+		if (wmsLayer) map.removeLayer(wmsLayer);
+		
+		const layerName = wmsInfo[region].layers[contaminante];
+		const wmsUrl = wmsInfo[region].url;
+		
+		wmsLayer = L.tileLayer.wms(wmsUrl, {
+			layers: layerName,
+			format: 'image/png',
+			transparent: true,
+			opacity: 0.6,
+			time: timeISO
+		}).addTo(map);
+		
+		if (styleName) wmsLayer.setParams({ styles: styleName });
+		
+		leyendaDiv.textContent = `Leyenda: ${leyendas[contaminante]} (Hora UTC: ${fechaReal.getUTCHours()}:00)`;
+		renderLegend(contaminante);
+	}
+\end{lstlisting}
+
 \section{Pollutant Value Extraction on Map Click}
-Users can click on any point of the map to obtain the forecasted concentration of the selected pollutant at that location. This is accomplished by the asynchronous function \texttt{getValueFromLayer()}, which sends a WMS GetFeatureInfo request to the CAMS servers using the coordinates of the clicked point and the selected forecast hour. The response is parsed to extract the raw pollutant value, which is then converted to a standardized unit using predefined conversion factors specific to each pollutant. The result, including both the concentration and its unit, is displayed on the interface, allowing users to quickly understand the expected air quality at a given location.
+Users can click on any point of the map to obtain the forecasted concentration of the selected pollutant at that location. This is accomplished by an asynchronous function, which sends a WMS GetFeatureInfo request to the CAMS servers using the coordinates of the clicked point and the selected forecast hour. The response is parsed to extract the raw pollutant value, which is then converted to a standardized unit using predefined conversion factors specific to each pollutant. The result, including both the concentration and its unit, is displayed on the interface, allowing users to quickly understand the expected air quality at a given location.
 
 
 \section{Historical Data Visualization}
 In addition to showing the concentration at a single point in time, the platform allows users to explore the temporal profile of pollutant concentrations at a specific location. The function \texttt{getHistoricalDataForPollutant()} retrieves data for all available forecast hours in the slider. Each forecast hour is queried individually through a WMS GetFeatureInfo request, and the values are converted to consistent units. The resulting time series is plotted using Highcharts through the \texttt{plotPollutantHistory()} function, producing an interactive line chart. This feature enables users to visualize how pollutant concentrations evolve over time and identify periods of higher risk.
+
+
+\begin{lstlisting}[language=JavaScript, caption={Plotting historical pollutant data using Highcharts}]
+	function plotPollutantHistory(data) {
+		Highcharts.chart('chartContainer', {
+			chart: { type: 'line', zoomType: 'x' },
+			title: { text: 'Historial de Contaminantes' },
+			xAxis: { type: 'datetime', title: { text: 'Fecha/Hora UTC' } },
+			yAxis: { title: { text: 'Concentracion (ug/m3)' }, min: 0 },
+			series: [{ name: contaminanteSelect.value, data: data, turboThreshold: 0 }],
+			credits: { enabled: false },
+			exporting: { enabled: true }
+		});
+	}
+\end{lstlisting}
 
 \section{Animation of Forecasts}
 
@@ -139,4 +242,8 @@ To further facilitate understanding of pollutant trends, the platform provides a
 
 \section{Color Gradients and Legends}
 
-Finally, each pollutant has a predefined color gradient and threshold levels stored in the application. When a layer is displayed, a floating legend is rendered on the screen. This legend visually represents the range of concentrations using the color gradient and indicates key values such as the minimum, 30\%, 50\%, 70\%, and maximum thresholds. Additionally, the legend includes the name of the pollutant and the measurement unit, allowing users to interpret the concentration values directly from the map. This visual aid is particularly important for users who are not familiar with specific pollutant levels or their health implications, as it provides an immediate and understandable representation of air quality.
+Finally, each pollutant has a predefined color gradient and threshold levels stored in the application. When a layer is displayed, a floating legend is rendered on the screen. This legend visually represents the range of concentrations using the color gradient and indicates key values such as the minimum, 30\%, 50\%, 70\%, and maximum thresholds. Additionally, the legend includes the name of the pollutant and the measurement unit.
+
+The legend is generated by requesting the corresponding WMS layer, which returns an image containing the color gradient and associated threshold levels. From this image, it is posible to extract both the colors and the numerical values for each threshold. These extracted values are then combined with the pollutant-specific conversion factor, ensuring that the legend displayed in the interface matches the standardized units used in the map and in the time-series charts.
+
+This approach ensures consistency between the visual representation of pollutant concentrations and the numerical data displayed, allowing users to intuitively interpret both current and forecasted air quality levels directly from the map.
