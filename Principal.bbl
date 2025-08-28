@@ -123,4 +123,49 @@ K.~L. Ebi and G.~McGregor, ``Climate change, tropospheric ozone and particulate
   matter, and health impacts,'' {\em Environmental health perspectives},
   vol.~116, no.~11, pp.~1449--1455, 2008.
 
+\bibitem{sokhi2021advances}
+R.~S. Sokhi, N.~Moussiopoulos, A.~Baklanov, J.~Bartzis, I.~Coll, S.~Finardi,
+  R.~Friedrich, C.~Geels, T.~Gr{\"o}nholm, T.~Halenka, {\em et~al.}, ``Advances
+  in air quality research--current and emerging challenges,'' {\em Atmospheric
+  Chemistry and Physics Discussions}, vol.~2021, pp.~1--133, 2021.
+
+\bibitem{copernicusTechnicalNote}
+``{T}echnical note: {E}valuation of the {C}opernicus {A}tmosphere {M}onitoring
+  {S}ervice {C}y48{R}1 upgrade of {J}une 2023 --- acp.copernicus.org.''
+  \url{https://acp.copernicus.org/articles/24/9475/2024/}.
+\newblock [Accessed 27-08-2025].
+
+\bibitem{ecmwfCAMSRegional}
+``{C}{A}{M}{S} {R}egional: {E}uropean air quality reanalyses data documentation
+  - {C}opernicus {K}nowledge {B}ase - {E}{C}{M}{W}{F} {C}onfluence {W}iki ---
+  confluence.ecmwf.int.''
+  \url{https://confluence.ecmwf.int/display/CKB/CAMS%2BRegional%3A%2BEuropean%2Bair%2Bquality%2Breanalyses%2Bdata%2Bdocumentation?}
+\newblock [Accessed 27-08-2025].
+
+\bibitem{copernicusModelOutput}
+``{M}odel output statistics ({M}{O}{S}) applied to {C}opernicus {A}tmospheric
+  {M}onitoring {S}ervice ({C}{A}{M}{S}) {O}3 forecasts: trade-offs between
+  continuous and categorical skill scores --- acp.copernicus.org.''
+  \url{https://acp.copernicus.org/articles/22/11603/2022/}.
+\newblock [Accessed 27-08-2025].
+
+\bibitem{copernicusGlobalServices}
+``{G}lobal {S}ervices | {C}opernicus --- atmosphere.copernicus.eu.''
+  \url{https://atmosphere.copernicus.eu/global-services}.
+\newblock [Accessed 28-08-2025].
+
+\bibitem{eskes2024evaluation}
+H.~Eskes, A.~Tsikerdekis, M.~Ades, M.~Alexe, A.~C. Benedictow, Y.~Bennouna,
+  L.~Blake, I.~Bouarar, S.~Chabrillat, R.~Engelen, {\em et~al.}, ``Evaluation
+  of the copernicus atmosphere monitoring service cy48r1 upgrade of june
+  2023,'' {\em Atmospheric Chemistry and Physics}, vol.~24, no.~16,
+  pp.~9475--9514, 2024.
+
+\bibitem{CAMSreport}
+{Copernicus Atmosphere Monitoring Service (CAMS)}, ``Documentation for the
+  evaluation and quality control (eqc) of the ....''
+  \url{https://atmosphere.copernicus.eu/sites/default/files/custom-uploads/EQC-regional/CAMS283_2021SC2_D83.4.1.1-2024_202407_v2.pdf},
+  2024.
+\newblock Accedido el 28 de agosto de 2025.
+
 \end{thebibliography}
