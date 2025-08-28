@@ -1,178 +1,142 @@
 \chapter[Implementation]{Implementation}
 \label{Chap3}
 
-\section{Overview}
-The application is a lightweight web client that runs in the browser and is served locally using XAMPP. It consists of a single-page interface built with HTML, CSS, and JavaScript, using Leaflet for interactive maps and Chart.js for time-series plots. All data are pulled on demand from CAMS endpoints (WMS for map tiles and GetFeatureInfo for point values; optionally WCS/ADS downloads for higher-fidelity data). If needed, a minimal PHP proxy is used to bypass CORS restrictions.
+\section{System Architecture}
 
-\section{Components}
-\subsection{Frontend (Browser)}
-\begin{itemize}
-	\item \textbf{Leaflet map}: Base tiles from OpenStreetMap with WMS overlay layers for CAMS Global and Regional products.
-	\item \textbf{UI Controls}: Region selector (Global/Europe), pollutant selector, time slider/animation control, and an information panel.
-	\item \textbf{Point Query}: On map click, the application issues a WMS GetFeatureInfo request to retrieve the estimated concentration at the clicked location and selected forecast hour.
-	\item \textbf{Time-Series Plots}: Chart.js renders the forecast at a specific (latitude, longitude) for the next hours/days.
-\end{itemize}
+The platform developed to visualize atmospheric pollutant forecasts is based on a \textbf{client-only web application running entirely in the browser}. This means that the user does not need to install specialized software or download large datasets to interact with maps and graphs. All interactions occur dynamically and in real time.
 
-\subsection{Backend (Optional, XAMPP/PHP)}
-\begin{itemize}
-	\item \textbf{CORS Proxy (PHP)}: Forwards WMS/WCS/ADS requests and returns responses to the browser to avoid cross-origin issues and centralize tokens/keys.
-	\item \textbf{Caching (Optional)}: Short-term file caching for identical WMS requests during animation to improve responsiveness.
-\end{itemize}
+The architecture follows a typical pattern for modern web applications. There is a \textbf{presentation layer} responsible for displaying information and enabling user interaction, and a \textbf{data flow} connecting this layer to external services that provide atmospheric data. In this case, the data is offered by CAMS (Copernicus Atmosphere Monitoring Service) through ECMWF’s \emph{ecCharts} platform, which exposes pollutant concentration fields at both global and European scales using the OGC Web Map Service (WMS) standard.
+
+The browser manages interaction and rendering using standard web technologies: HTML for structure, CSS for styling, and JavaScript for interactive logic. Within this layer, \emph{Leaflet} displays interactive maps onto which pollutant layers are overlaid via WMS requests, while \emph{Highcharts} generates on-demand time-series plots of pollutant concentrations at user-selected locations.
+
+For clarity, the architecture can be visualized as illustrated in Figure~\ref{fig:architecture}, the client interacts directly with CAMS servers using WMS requests. The \textbf{web browser} executes the application and issues WMS requests to CAMS servers via the Internet. CAMS servers act as the information provider, rendering pollutant concentration maps (GetMap) and returning pixel values at clicked points (GetFeatureInfo). The data flow is strictly \textit{on demand}: data is only requested when the user selects a pollutant, adjusts the time slider, or clicks on the map.
+
+
+\begin{figure}[h!btp]
+	\centering
+	\includegraphics[width=0.6\textwidth]{fig/diagrama1.png}
+	\caption{System architecture: interaction between the web client and CAMS servers via WMS APIs.}
+	\label{fig:architecture}
+\end{figure}
 
 \section{Choice of Mapping Library}
-When designing the visualization system, one of the key decisions was the choice of a mapping library to handle the rendering and interaction with geospatial layers. Several options were considered:
-\begin{itemize}
-	\item \textbf{Google Maps API}: Widely known and with extensive documentation, but not ideal for this project due to licensing restrictions, limited support for WMS layers, and dependency on proprietary services.
-	\item \textbf{OpenLayers}: A powerful open-source library with native support for OGC standards (WMS, WFS, WMTS). However, its complexity and steep learning curve make it less suitable for a lightweight and user-friendly prototype.
-	\item \textbf{Leaflet.js}: A popular, lightweight JavaScript library for interactive maps. While its native WMS support is more basic than OpenLayers, it can be easily extended with plugins. Its simplicity, wide adoption, and strong community support make it highly appropriate for educational and prototype projects. \texttt{leaflet.timeDimension}).
-\end{itemize}
 
-For these reasons, Leaflet.js was selected as the core mapping library. Its main advantages for this work are:
-\begin{itemize}
-	\item Simplicity and low learning curve: Leaflet allows rapid prototyping of interactive maps with minimal code, which accelerates development.
-	\item Lightweight performance: With a size of less than 40 KB, Leaflet loads quickly in browsers, ensuring accessibility on low-resource devices.
-	\item Extensibility:Plugins (e.g., leaflet.wms, leaflet.timeDimension) enable integration with OGC web services like CAMS WMS, allowing temporal navigation and layer management.
-	\item Open source and free: Aligns with the project’s philosophy of using open-access tools and ensuring that the application can be reused without licensing issues.
-	\item Large community: A large ecosystem of tutorials, forums, and examples simplifies troubleshooting and guarantees long-term sustainability.
-\end{itemize}
+One of the key decisions in the design of the visualization system was the selection of a mapping library capable of rendering geospatial data and providing interactive functionality. This choice is critical because it determines not only the technical possibilities of the system but also its accessibility for future users and developers.  
 
-Thus, Leaflet provides the optimal balance between simplicity and functionality. It is powerful enough to handle CAMS WMS layers and interactive visualization, while being approachable for future users or developers who wish to extend the tool.  
+The first option considered was \textbf{Google Maps API}, a service that is widely recognized and extensively documented. At first sight, it might appear to be the easiest solution, since it provides polished interfaces and reliable infrastructure. However, it is not well suited for the objectives of this project. Being a proprietary tool, it imposes licensing restrictions that limit its free use and redistribution. Furthermore, it offers only limited support for geospatial standards such as WMS (Web Map Service), which are essential when working with scientific or institutional sources of environmental data.  
 
-\section{Data Flow}
-\begin{enumerate}
-	\item User selects region and pollutant → the app adds a WMS layer (transparent PNG) over the base map.
-	\item User moves the time slider → updates the WMS layer to display the correct forecast hour.
-	\item User clicks on the map → builds a GetFeatureInfo request and displays the value at that location.
-	\item User opens the chart panel → queries multiple times to assemble a time series at (lat, lon), then plots it with Chart.js.
-\end{enumerate}
+Another possibility was \textbf{OpenLayers}, an open-source library that is highly regarded in the professional field of web mapping. Its main strength lies in its native compatibility with OGC standards, including WMS, WFS, and WMTS. This makes it an extremely powerful and flexible option for complex applications. Nevertheless, this power comes at the cost of a higher degree of complexity. The learning curve for OpenLayers is steeper, and for a project intended to be both educational and easy to prototype, this could represent an unnecessary barrier for development and future maintenance.  
 
-\section{Interaction with CAMS WMS/WCS}
-\subsection{Web Map Service (WMS)}
-The application consumes CAMS air quality forecasts via WMS layers:
-\begin{itemize}
-	\item \textbf{GetMap}: Renders pollutant concentration fields as images.
-	\item \textbf{GetFeatureInfo}: Retrieves pollutant values at a user-specified point.
-	\item \textbf{GetCapabilities}: XML document describing available layers, temporal range, spatial extent, and supported formats.
-\end{itemize}
+The final choice was \textbf{Leaflet.js}, a lightweight and widely adopted library for interactive web maps. Although its built-in support for WMS services is more basic than that of OpenLayers, it can be extended with a rich ecosystem of plugins, such as \textit{leaflet.wms} or \textit{leaflet.timeDimension}. These extensions allow seamless integration of external services, including the CAMS datasets used in this project, and make it possible to explore temporal variations in air quality data through interactive layers.  
 
-\subsection{Understanding GetCapabilities}
-The GetCapabilities request is the entry point to a WMS service, returning XML metadata with:
-\begin{itemize}
-	\item Service provider, contact, and supported CRS.
-	\item List of layers with names, titles, units, and bounding boxes.
-	\item Temporal dimension (forecast hours available).
-	\item Supported formats for GetMap and GetFeatureInfo.
-\end{itemize}
+Leaflet was selected because it offers the best balance between simplicity and functionality. Its design allows developers to build interactive maps with only a few lines of code, accelerating the prototyping process. The library is very lightweight (less than 40~KB), which ensures quick loading times even on devices with limited resources, thereby improving accessibility. Since it is entirely open-source and free to use, it also aligns with the philosophy of this project, which aims to rely on open technologies to guarantee reproducibility and long-term usability. Finally, Leaflet benefits from an active and large community that provides tutorials, documentation, and practical examples, making it easier to learn, troubleshoot, and sustain over time.  
 
-\subsection{Discovery and Selection of Forecast Layers}
-
-\subsubsection{Motivation for Automated Layer Discovery}
-Although ECMWF provides documentation of the CAMS WMS service\footnote{\url{https://confluence.ecmwf.int/display/CKB/WMS+for+CAMS+Global+and+European+air+quality+products}}, 
-the official page does not include the full list of available layers nor the exact technical \texttt{Name} identifiers required for WMS requests. 
-Since these identifiers are essential for building GetMap and GetFeatureInfo queries, a custom \textbf{Python script} was developed to parse the \texttt{GetCapabilities} XML document directly. 
-
-\begin{verbatim}
-	https://eccharts.ecmwf.int/wms/?token=public&request=GetCapabilities&version=1.3.0
-\end{verbatim}
-
-This approach ensured:
-\begin{itemize}
-	\item Access to the complete and up-to-date list of forecast layers.
-	\item Retrieval of metadata such as units, temporal dimensions, and bounding boxes.
-	\item Verification of differences between CAMS Europe and CAMS Global domains.
-\end{itemize}
-
-By implementing this automated discovery, the project avoided relying on incomplete or outdated documentation and guaranteed compatibility with the actual WMS service.  
-
-The layers can be grouped into two main categories: CAMS Europe and CAMS Global. Both provide forecasts for key atmospheric pollutants, but with different spatial resolutions and domain coverage.
-
-\subsubsection{CAMS Europe Layers}
-The European service provides high-resolution forecasts (approximately 10 km grid spacing) focused on the European domain.  
-Key surface-level forecast layers include:
-\begin{itemize}
-	\item \textbf{NO\textsubscript{2} (Nitrogen Dioxide)}: A traffic- and industry-related pollutant, harmful to health and a precursor of ozone and particulate matter.
-	\item \textbf{SO\textsubscript{2} (Sulfur Dioxide)}: Emitted mainly by coal and oil combustion; contributes to acid rain and respiratory issues.
-	\item \textbf{CO (Carbon Monoxide)}: Toxic gas from incomplete combustion; affects oxygen transport in blood.
-	\item \textbf{O\textsubscript{3} (Ozone)}: A secondary pollutant formed photochemically, harmful to health, ecosystems, and crops.
-	\item \textbf{NH\textsubscript{3} (Ammonia)}: Mainly from agriculture (fertilizers, livestock); contributes to secondary aerosol formation.
-	\item \textbf{PM\textsubscript{2.5} and PM\textsubscript{10} (Particulate Matter)}: Fine and coarse particles; PM\textsubscript{2.5} is especially dangerous due to deep lung penetration.
-\end{itemize}
-
-Additional European layers are also available (pollen, formaldehyde, non-methane VOCs, aerosol subtypes such as dust, sea salt, wildfire smoke, and carbonaceous fractions).  
-These are scientifically valuable but were considered out of scope for this prototype.
-
-\subsubsection{CAMS Global Layers}
-The global service provides worldwide forecasts at coarser resolution (approximately 40 km).  
-Relevant surface-level layers include:
-\begin{itemize}
-	\item \textbf{NO\textsubscript{2}}, \textbf{SO\textsubscript{2}}, \textbf{CO}, \textbf{O\textsubscript{3}}, \textbf{PM\textsubscript{2.5}}, \textbf{PM\textsubscript{10}}: Same pollutants as the European service but at a global scale.
-	\item \textbf{CH\textsubscript{4} (Methane)}: A greenhouse gas with strong radiative forcing.
-	\item \textbf{CO\textsubscript{2} (Carbon Dioxide)}: The primary anthropogenic greenhouse gas.
-\end{itemize}
-
-In addition, CAMS Global provides vertical profiles of pollutants, aerosol optical depth (AOD at 550 nm), UV index forecasts, and fire emission datasets (GFAS).  
-While relevant for climate and atmospheric studies, they are less intuitive for end users focusing on air quality near the surface.
-
-\subsubsection{Selection of Surface Layers}
-For this project, only \textbf{surface-level pollutants} were integrated into the visualization tool.  
-This decision was based on:
-\begin{enumerate}
-	\item \textbf{Relevance for air quality monitoring}: Surface concentrations are directly linked to human exposure and regulated by WHO and EU standards.
-	\item \textbf{Clarity for end users}: Surface fields provide intuitive information (e.g., local PM\textsubscript{2.5} levels), while vertical profiles or aerosol optical depth are less accessible to non-specialists.
-\end{enumerate}
-
-By focusing on surface layers, the tool ensures clear and actionable insights into \textbf{urban and regional air quality}, while retaining the possibility of future extensions to more advanced datasets.
+In summary, Leaflet represents an optimal solution for this project. It is powerful enough to handle CAMS WMS layers and interactive visualizations, while remaining simple and approachable for future users or developers who may wish to extend or adapt the tool without requiring advanced expertise in geospatial technologies.  
 
 
+\section{Discovering Available Layers}
 
-\section{Making WMS Requests from the Web Client}
+To determine which pollutants and forecast products are available from CAMS, it is necessary to inspect the WMS service capabilities. ECMWF provides documentation of the CAMS WMS service, but the official page does not contain the complete list of layers. Therefore, the full set of available layers is obtained through a \texttt{GetCapabilities} request, which returns an XML document describing them. Each layer entry includes its internal identifier, descriptive title, units (if defined), and the time dimension specifying the forecast horizon.
 
-The web client interacts with the CAMS WMS service using two main types of requests:
 
-\begin{itemize}
-	\item \textbf{GetMap requests}: These retrieve raster images representing pollutant concentrations for a selected layer, region, and forecast hour. 
-	\item \textbf{GetFeatureInfo requests}: These provide the estimated concentration at a specific geographic point (latitude/longitude) for the selected pollutant and forecast time.
-\end{itemize}
+The process can be automated using a Python script, shown in Listing~\ref{lst:getcapabilities}. It sends a request to the CAMS server, parses the XML, and prints out the available layers with their metadata:
 
-\paragraph{Dynamic Layer Selection}
-In the front-end, the user selects a \textit{region} (Europe or Global) and a \textit{pollutant}. The available pollutants differ depending on the region. Once a selection is made, the corresponding WMS layer name and endpoint URL are retrieved from a predefined mapping object.
+\lstset{language=Python, 
+	basicstyle=\ttfamily\small, 
+	keywordstyle=\color{blue}\bfseries, 
+	commentstyle=\color{gray}\itshape, 
+	stringstyle=\color{red}, 
+	breaklines=true,
+	frame=single,
+	numbers=left,
+	numberstyle=\tiny,
+	captionpos=b
+}
+ \begin{lstlisting}[language=Python, caption={Python script to extract CAMS layers from WMS GetCapabilities}, label={lst:getcapabilities}]
+		import requests
+		import xml.etree.ElementTree as ET
+		
+		url = "https://eccharts.ecmwf.int/wms/?token=public&request=GetCapabilities&version=1.3.0"
+		
+		response = requests.get(url)
+		xml_content = response.content
+		
+		root = ET.fromstring(xml_content)
+		
+		ns = {'wms': 'http://www.opengis.net/wms'}
+		
+		layers = root.findall('.//wms:Layer/wms:Layer', ns)
+		
+		print(f"Found {len(layers)} layers:\n")
+		
+		for layer in layers:
+		name = layer.find('wms:Name', ns)
+		title = layer.find('wms:Title', ns)
+		units = layer.find('wms:Units', ns)
+		dimension = layer.find("wms:Dimension[@name='time']", ns)
+		
+		print("Layer:")
+		print(f"  Name:   {name.text if name is not None else 'N/A'}")
+		print(f"  Title:  {title.text if title is not None else 'N/A'}")
+		print(f"  Units:  {units.text if units is not None else 'N/A'}")
+		print(f"  Time:   {dimension.text[:50] + '...'}" if dimension is not None else "  Time:   N/A")
+		print("-" * 40)
+\end{lstlisting}
 
-\paragraph{Example of GetMap Request}
-For rendering a raster layer, the client constructs a WMS GetMap URL using the selected layer name, geographic bounds, and the forecast time in ISO 8601 format. The image is then overlaid on the Leaflet map:
+When executed, the script returns a list of all the layers exposed by CAMS. Each entry contains the pollutant or variable identifier, its description, the units, and the available time stamps. in Listing~\ref{lst:truncatedoutput}.
 
-\begin{verbatim}
-	wmsLayer = L.tileLayer.wms(wmsUrl, {
-		layers: layerName,
-		format: 'image/png',
-		transparent: true,
-		opacity: 0.6,
-		time: timeISO
-	}).addTo(map);
-\end{verbatim}
+\begin{lstlisting}[caption={Truncated output of the GetCapabilities request}, label={lst:truncatedoutput}]
 
-\paragraph{Example of GetFeatureInfo Request}
-When the user clicks on the map, a \texttt{GetFeatureInfo} request is constructed asynchronously to query the WMS server for the pollutant value at that point:
+	Found 121 layers:
+	...
+	
+	Layer: 
+	Name: composition_o3_surface Title: Ozone at surface [ppbv] (provided by CAMS, the Copernicus Atmosphere Monitoring Service)
+	Units: N/A Time: 2025-08-23T03:00:00Z,2025-08-23T06:00:00Z/2025-09-... 
+	---------------------------------------- 
+	
+	Layer: 
+	Name: 
+	composition_europe_o3_analysis_surface 
+	Title: Ozone at surface [ug/m3] (provided by CAMS, the Copernicus Atmosphere Monitoring Service) 
+	Units: N/A 
+	Time: 2022-11-28T00:00:00Z,2022-11-29T00:00:00Z/2023-01-... 
+	---------------------------------------- 
+	
+	Layer: 
+	Name: composition_pm10 
+	Title: PM10 - coarse particulate matter [ug / m3] (provided by CAMS) 
+	Units: N/A 
+	Time: 2025-08-23T03:00:00Z,2025-08-23T06:00:00Z/2025-09-... 
+	----------------------------------------
+	
+	...
+\end{lstlisting}
 
-\begin{verbatim}
-	const url = `${wmsBaseUrl}?request=GetFeatureInfo&service=WMS&
-	layers=${layerName}&query_layers=${layerName}&time=${timeISO}&...
-	`;
-	const response = await fetch(url);
-	const value = parseResponse(response);
-\end{verbatim}
+This information is essential for dynamically populating the pollutant menu and enabling correct requests for specific forecast hours.
 
-The function handles possible cases where the requested point is outside the model domain, returning "Not available".
 
-\paragraph{Hourly Forecast Handling}
-The interface includes a time slider to navigate forecast hours. The JavaScript code maintains an array of available hours (in UTC) and updates the WMS layer accordingly whenever the slider changes or the user plays the animation. This allows real-time visualization of hourly surface-level pollutant forecasts.
+\section{Hourly Forecast Handling}
 
-\paragraph{Summary}
-This approach ensures that all interactions with CAMS WMS are dynamic, responsive, and fully integrated into the browser interface. Users can select region, pollutant, and forecast hour, and immediately see both the map visualization and the local pollutant concentration at any clicked point.
+The platform provides hourly forecasts of atmospheric pollutants, enabling users to explore both the spatial distribution of pollutants on a map and the temporal evolution at specific locations. Handling these hourly forecasts involves several interconnected components, including the time slider, the WMS requests to CAMS, the rendering of map layers, and the visualization of historical data.
 
-\section{Rationale for Design Decisions}
-The architecture and technology choices are guided by the following principles:
-\begin{itemize}
-	\item \textbf{Use of WMS}: Enables fast, server-rendered visualization without requiring local data processing.
-	\item \textbf{GetFeatureInfo Queries}: Allow real-time access to values at selected locations without downloading full datasets.
-	\item \textbf{Leaflet.js as mapping core}: Combines performance, simplicity, and flexibility to suit both developers and non-expert users.
-\end{itemize}
+The first key component is the time slider, which allows the user to select the forecast hour they wish to inspect. The application automatically calculates the range of available forecast hours based on the current UTC time and a forecast horizon of four days. For each hour within this range, an ISO-formatted timestamp is generated and associated with a position on the slider. When users select a global forecast, the application rounds the chosen hour to the nearest multiple of three, reflecting the temporal resolution of the global CAMS forecasts. The slider also displays labels that indicate the day of the forecast, providing an intuitive reference so users can easily identify which hours correspond to which day.
+
+\section{Dynamic Layer Updating}
+
+Whenever the user changes the selected region, pollutant, or forecast hour, the function \texttt{actualizarCapa()} is triggered. This function is responsible for updating the map with the correct pollutant layer for the chosen time. It first computes the exact time to request from the CAMS servers, taking into account region-specific rounding rules. Using the service URL provided by CAMS, it then constructs a WMS GetMap request, specifying the layer corresponding to the selected pollutant. If a color gradient style is defined for that pollutant, it is included in the request to ensure a meaningful visual representation. Before adding the new layer to the map, any previous pollutant layer is removed, ensuring that only the selected forecast is visible. The map legend is also updated at this point, reflecting the pollutant’s concentration range and the color mapping used to represent different values.
+
+\section{Pollutant Value Extraction on Map Click}
+Users can click on any point of the map to obtain the forecasted concentration of the selected pollutant at that location. This is accomplished by the asynchronous function \texttt{getValueFromLayer()}, which sends a WMS GetFeatureInfo request to the CAMS servers using the coordinates of the clicked point and the selected forecast hour. The response is parsed to extract the raw pollutant value, which is then converted to a standardized unit using predefined conversion factors specific to each pollutant. The result, including both the concentration and its unit, is displayed on the interface, allowing users to quickly understand the expected air quality at a given location.
+
+
+\section{Historical Data Visualization}
+In addition to showing the concentration at a single point in time, the platform allows users to explore the temporal profile of pollutant concentrations at a specific location. The function \texttt{getHistoricalDataForPollutant()} retrieves data for all available forecast hours in the slider. Each forecast hour is queried individually through a WMS GetFeatureInfo request, and the values are converted to consistent units. The resulting time series is plotted using Highcharts through the \texttt{plotPollutantHistory()} function, producing an interactive line chart. This feature enables users to visualize how pollutant concentrations evolve over time and identify periods of higher risk.
+
+\section{Animation of Forecasts}
+
+To further facilitate understanding of pollutant trends, the platform provides a play/stop button that animates the forecast over all available hours. Activating this feature sequentially advances the slider, updating both the WMS layer on the map and the legend in real time. This animation helps users intuitively grasp the dynamics of pollutant distribution and evolution without manually adjusting the slider.
+
+\section{Color Gradients and Legends}
+
+Finally, each pollutant has a predefined color gradient and threshold levels stored in the application. When a layer is displayed, a floating legend is rendered on the screen. This legend visually represents the range of concentrations using the color gradient and indicates key values such as the minimum, 30\%, 50\%, 70\%, and maximum thresholds. Additionally, the legend includes the name of the pollutant and the measurement unit, allowing users to interpret the concentration values directly from the map. This visual aid is particularly important for users who are not familiar with specific pollutant levels or their health implications, as it provides an immediate and understandable representation of air quality.
