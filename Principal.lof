@@ -11,5 +11,12 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {3.1}{\ignorespaces System architecture: interaction between the web client and CAMS servers via WMS APIs.}}{20}{figure.caption.24}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Main user interface of the developed platform. (A) Text panel indicating the selected pollutant and forecast hour. (B) Interactive map with clickable locations for pollutant value extraction. (C) Text panel showing the selected forecast day. (D) Animation controls for sequential forecast visualization. (E) Text panel displaying the clicked location and its pollutant value. (F) Menu for data download options from the chart.}}{28}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Extended view of the platform interface. (A) Region and pollutant selectors. (B) Time slider for navigating forecast hours. (C) Color scale legend indicating pollutant concentration levels. (D) Time-series chart showing the evolution of pollutant concentrations (example: PM\textsubscript {10}) at the selected location.}}{29}{figure.caption.26}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Example of point query outside the European forecast domain. The red point indicates the clicked location beyond the coverage area, and the information panel shows that the value is not available.}}{30}{figure.caption.27}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Time-series visualization of PM\textsubscript {2.5} concentrations at a selected location within the European domain. Values update every hour according to the temporal resolution of the forecasts.}}{31}{figure.caption.28}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Time-series visualization of PM\textsubscript {2.5} concentrations at a selected location within the Global domain. Values remain constant over 3-hour intervals, corresponding to the temporal resolution of the CAMS forecasts.}}{31}{figure.caption.29}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Export functionality for pollutant time-series data. Users can download the values displayed in the chart for further analysis.}}{32}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Snapshots of the UV Index forecast animation at different forecast hours, illustrating how the pollutant layer updates as the time slider moves.}}{32}{figure.caption.31}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }

@@ -1,6 +1,8 @@
 \chapter[Implementation]{Implementation}
 \label{Chap3}
 
+This chapter describes the implementation process of the web platform developed for the visualization of atmospheric pollutant forecasts. The main objective is to detail the technical decisions made, the system architecture, and the different components that enable dynamic interaction with environmental data in real time.
+
 \section{System Architecture}
 
 The platform developed to visualize atmospheric pollutant forecasts is based on a \textbf{client-only web application running entirely in the browser}. This means that the user does not need to install specialized software or download large datasets to interact with maps and graphs. All interactions occur dynamically and in real time.
@@ -157,7 +159,7 @@ For example, for \(\mathrm{NO_2}\):
 
 This means that each ppbv of NO\(_2\) corresponds approximately to \(1.9125\,\mu g/m^3\).  
 
-The code that performs the conversion is:
+The code that performs the conversion is shown in Listing~\ref{lst:conversion}.
 
 \lstdefinelanguage{JavaScript}{
 	keywords={break, case, catch, class, const, continue, debugger, default, delete, do, else, export, extends, finally, for, function, if, import, in, instanceof, let, new, return, super, switch, this, throw, try, var, while, with, yield},
@@ -166,7 +168,7 @@ The code that performs the conversion is:
 	morestring=[b]",
 	morestring=[b]'
 }
-\begin{lstlisting}[caption={Conversion of pollutant values to \(\mu g/m^3\)}]
+\begin{lstlisting}[caption={Conversion of pollutant values to \(\mu g/m^3\)}, label={lst:conversion}]
 	function convertPollutantValue(pollutant, rawValue) {
 		let value = parseFloat(rawValue);
 		let unit = "ug/m3"; 
@@ -189,11 +191,11 @@ Each factor in the code corresponds to the calculation shown for NO\(_2\), adjus
 
 \section{Dynamic Layer Updating}
 
-Whenever the user changes the selected region, pollutant, or forecast hour, the function \texttt{actualizarCapa()} is triggered. This function is responsible for updating the map with the correct pollutant layer for the chosen time. It first computes the exact time to request from the CAMS servers, taking into account region-specific rounding rules. Using the service URL provided by CAMS, it then constructs a WMS GetMap request, specifying the layer corresponding to the selected pollutant. If a color gradient style is defined for that pollutant, it is included in the request to ensure a meaningful visual representation. Before adding the new layer to the map, any previous pollutant layer is removed, ensuring that only the selected forecast is visible. The map legend is also updated at this point, reflecting the pollutant’s concentration range and the color mapping used to represent different values.
+Whenever the user changes the selected region, pollutant, or forecast hour, the function \texttt{updateLayer()} is triggered. This function is responsible for updating the map with the correct pollutant layer for the chosen time. The implementation is shown in Listing~\ref{lst:updateLayer}. It first computes the exact time to request from the CAMS servers, taking into account region-specific rounding rules. Using the service URL provided by CAMS, it then constructs a WMS GetMap request, specifying the layer corresponding to the selected pollutant. If a color gradient style is defined for that pollutant, it is included in the request to ensure a meaningful visual representation. Before adding the new layer to the map, any previous pollutant layer is removed, ensuring that only the selected forecast is visible. The map legend is also updated at this point, reflecting the pollutant’s concentration range and the color mapping used to represent different values.
 
 
-\begin{lstlisting}[caption={Updating the map layer for the selected pollutant and hour}]
-	function actualizarCapa() {
+\begin{lstlisting}[caption={Updating the map layer for the selected pollutant and hour}, label={lst:updateLayer}]
+	function updateLayer() {
 		if (wmsLayer) map.removeLayer(wmsLayer);
 		
 		const layerName = wmsInfo[region].layers[contaminante];
@@ -209,7 +211,7 @@ Whenever the user changes the selected region, pollutant, or forecast hour, the 
 		
 		if (styleName) wmsLayer.setParams({ styles: styleName });
 		
-		leyendaDiv.textContent = `Leyenda: ${leyendas[contaminante]} (Hora UTC: ${fechaReal.getUTCHours()}:00)`;
+		leyendaDiv.textContent = = `Leyend: ${leyendas[contaminante]} (Hour UTC: ${fechaReal.getUTCHours()}:00)`;
 		renderLegend(contaminante);
 	}
 \end{lstlisting}
@@ -219,10 +221,10 @@ Users can click on any point of the map to obtain the forecasted concentration o
 
 
 \section{Historical Data Visualization}
-In addition to showing the concentration at a single point in time, the platform allows users to explore the temporal profile of pollutant concentrations at a specific location. The function \texttt{getHistoricalDataForPollutant()} retrieves data for all available forecast hours in the slider. Each forecast hour is queried individually through a WMS GetFeatureInfo request, and the values are converted to consistent units. The resulting time series is plotted using Highcharts through the \texttt{plotPollutantHistory()} function, producing an interactive line chart. This feature enables users to visualize how pollutant concentrations evolve over time and identify periods of higher risk.
+In addition to showing the concentration at a single point in time, the platform allows users to explore the temporal profile of pollutant concentrations at a specific location. The function \texttt{getHistoricalDataForPollutant()} retrieves data for all available forecast hours in the slider. Each forecast hour is queried individually through a WMS GetFeatureInfo request, and the values are converted to consistent units. The resulting time series is plotted using Highcharts through the \texttt{plotPollutantHistory()} function, as shown in Listing~\ref{lst:plotting}. Producing an interactive line chart. This feature enables users to visualize how pollutant concentrations evolve over time and identify periods of higher risk.
 
 
-\begin{lstlisting}[language=JavaScript, caption={Plotting historical pollutant data using Highcharts}]
+\begin{lstlisting}[language=JavaScript, caption={Plotting historical pollutant data using Highcharts}, label={lst:plotting}]
 	function plotPollutantHistory(data) {
 		Highcharts.chart('chartContainer', {
 			chart: { type: 'line', zoomType: 'x' },
