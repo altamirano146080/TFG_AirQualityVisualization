@@ -1,25 +1,10 @@
 \begin{thebibliography}{10}
 
-\bibitem{world2021global}
-W.~H. Organization {\em et~al.}, {\em WHO global air quality guidelines:
-  particulate matter (PM2. 5 and PM10), ozone, nitrogen dioxide, sulfur dioxide
-  and carbon monoxide}.
-\newblock World Health Organization, 2021.
-
-\bibitem{nishida2022impact}
-C.~Nishida and K.~Yatera, ``The impact of ambient environmental and
-  occupational pollution on respiratory diseases,'' {\em International journal
-  of environmental research and public health}, vol.~19, no.~5, p.~2788, 2022.
-
-\bibitem{rajagopalan2021pollution}
-S.~Rajagopalan and P.~J. Landrigan, ``Pollution and the heart,'' {\em New
-  England Journal of Medicine}, vol.~385, no.~20, pp.~1881--1892, 2021.
-
-\bibitem{watson2016impact}
-L.~Watson, G.~Lacressonni{\`e}re, M.~Gauss, M.~Engardt, C.~Andersson, B.~Josse,
-  V.~Mar{\'e}cal, A.~Nyiri, S.~Sobolowski, G.~Siour, {\em et~al.}, ``Impact of
-  emissions and+ 2 c climate change upon future ozone and nitrogen dioxide over
-  europe,'' {\em Atmospheric environment}, vol.~142, pp.~271--285, 2016.
+\bibitem{kim2020cumulative}
+J.~B. Kim, M.~Prunicki, F.~Haddad, C.~Dant, V.~Sampath, R.~Patel, E.~Smith,
+  C.~Akdis, J.~Balmes, M.~P. Snyder, {\em et~al.}, ``Cumulative lifetime burden
+  of cardiovascular disease from early exposure to air pollution,'' {\em
+  Journal of the American Heart Association}, vol.~9, no.~6, p.~e014944, 2020.
 
 \bibitem{fuzzi2015particulate}
 S.~Fuzzi, U.~Baltensperger, K.~Carslaw, S.~Decesari, H.~Denier van~der Gon,
@@ -28,15 +13,21 @@ S.~Fuzzi, U.~Baltensperger, K.~Carslaw, S.~Decesari, H.~Denier van~der Gon,
   needs,'' {\em Atmospheric chemistry and physics}, vol.~15, no.~14,
   pp.~8217--8299, 2015.
 
-\bibitem{whoAmbientoutdoor}
-``{A}mbient (outdoor) air pollution --- who.int.''
-  \url{https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health}.
-\newblock [Accessed 27-08-2025].
+\bibitem{zhou2018impact}
+L.~Zhou, X.~Chen, and X.~Tian, ``The impact of fine particulate matter (pm2. 5)
+  on china's agricultural production from 2001 to 2010,'' {\em Journal of
+  Cleaner Production}, vol.~178, pp.~133--141, 2018.
+
+\bibitem{watson2016impact}
+L.~Watson, G.~Lacressonni{\`e}re, M.~Gauss, M.~Engardt, C.~Andersson, B.~Josse,
+  V.~Mar{\'e}cal, A.~Nyiri, S.~Sobolowski, G.~Siour, {\em et~al.}, ``Impact of
+  emissions and+ 2 c climate change upon future ozone and nitrogen dioxide over
+  europe,'' {\em Atmospheric environment}, vol.~142, pp.~271--285, 2016.
 
 \bibitem{whoTypesPollutants}
 ``{T}ypes of pollutants --- who.int.''
   \url{https://www.who.int/teams/environment-climate-change-and-health/air-quality-and-health/health-impacts/types-of-pollutants}.
-\newblock [Accessed 27-08-2025].
+\newblock [Accessed 29-08-2025].
 
 \bibitem{cao2025short}
 W.~Cao, H.~Huang, Z.~Chang, Z.~Liang, H.~Li, Z.~Cheng, and B.~Sun, ``Short-term
