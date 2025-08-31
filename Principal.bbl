@@ -42,18 +42,18 @@ S.~Liu, J.~T. J{\o}rgensen, P.~Ljungman, G.~Pershagen, T.~Bellander,
   pollution and incidence of asthma: the elapse project,'' {\em European
   Respiratory Journal}, vol.~57, no.~6, 2021.
 
+\bibitem{tiotiu2020impact}
+A.~I. Tiotiu, P.~Novakova, D.~Nedeva, H.~J. Chong-Neto, S.~Novakova,
+  P.~Steiropoulos, and K.~Kowal, ``Impact of air pollution on asthma
+  outcomes,'' {\em International journal of environmental research and public
+  health}, vol.~17, no.~17, p.~6212, 2020.
+
 \bibitem{zheng2021short}
 X.-y. Zheng, P.~Orellano, H.-l. Lin, M.~Jiang, and W.-j. Guan, ``Short-term
   exposure to ozone, nitrogen dioxide, and sulphur dioxide and emergency
   department visits and hospital admissions due to asthma: A systematic review
   and meta-analysis,'' {\em Environment international}, vol.~150, p.~106435,
   2021.
-
-\bibitem{tiotiu2020impact}
-A.~I. Tiotiu, P.~Novakova, D.~Nedeva, H.~J. Chong-Neto, S.~Novakova,
-  P.~Steiropoulos, and K.~Kowal, ``Impact of air pollution on asthma
-  outcomes,'' {\em International journal of environmental research and public
-  health}, vol.~17, no.~17, p.~6212, 2020.
 
 \bibitem{zarkeba2024relationship}
 {\L}.~Zar{\k{e}}ba, K.~Piszczatowska, K.~D{\.z}aman, K.~Soroczynska,
@@ -114,6 +114,26 @@ K.~L. Ebi and G.~McGregor, ``Climate change, tropospheric ozone and particulate
   matter, and health impacts,'' {\em Environmental health perspectives},
   vol.~116, no.~11, pp.~1449--1455, 2008.
 
+\bibitem{baklanov2020advances}
+A.~Baklanov and Y.~Zhang, ``Advances in air quality modeling and forecasting,''
+  {\em Global Transitions}, vol.~2, pp.~261--270, 2020.
+
+\bibitem{copernicusObservationsCopernicus}
+``{O}bservations | {C}opernicus --- atmosphere.copernicus.eu.''
+  \url{https://atmosphere.copernicus.eu/observations}.
+\newblock [Accessed 31-08-2025].
+
+\bibitem{copernicusInterfaceEuropean}
+``{A} new interface for our {E}uropean {A}ir {Q}uality {F}orecasts |
+  {C}opernicus --- atmosphere.copernicus.eu.''
+  \url{https://atmosphere.copernicus.eu/new-interface-our-european-air-quality-forecasts}.
+\newblock [Accessed 31-08-2025].
+
+\bibitem{copernicusCasesCopernicus}
+``{U}se cases | {C}opernicus --- atmosphere.copernicus.eu.''
+  \url{https://atmosphere.copernicus.eu/use-cases}.
+\newblock [Accessed 31-08-2025].
+
 \bibitem{sokhi2021advances}
 R.~S. Sokhi, N.~Moussiopoulos, A.~Baklanov, J.~Bartzis, I.~Coll, S.~Finardi,
   R.~Friedrich, C.~Geels, T.~Gr{\"o}nholm, T.~Halenka, {\em et~al.}, ``Advances
@@ -158,5 +178,11 @@ H.~Eskes, A.~Tsikerdekis, M.~Ades, M.~Alexe, A.~C. Benedictow, Y.~Bennouna,
   \url{https://atmosphere.copernicus.eu/sites/default/files/custom-uploads/EQC-regional/CAMS283_2021SC2_D83.4.1.1-2024_202407_v2.pdf},
   2024.
 \newblock Accedido el 28 de agosto de 2025.
+
+\bibitem{de2025new}
+A.~de~Meij, C.~Cuvelier, P.~Thunis, and E.~Pisoni, ``A new set of indicators
+  for model evaluation complementing fairmode's modelling quality objective
+  (mqo),'' {\em Geoscientific Model Development}, vol.~18, no.~13,
+  pp.~4231--4245, 2025.
 
 \end{thebibliography}

@@ -170,9 +170,9 @@ Many of these metrics were introduced in the context of European air quality mod
 
 \paragraph{Practical Use Cases:}
 \begin{itemize}
-	\item \textbf{Ozone (O$_3$)}: MNMB is preferred due to strong seasonal variability and high concentration ranges.
-	\item \textbf{Particulate matter (PM$_{10}$, PM$_{2.5}$)}: FGE and MFE are often used to capture proportional errors in urban vs. rural sites.
-	\item \textbf{Episode detection (peaks)}: Correlation (Pearson, Spearman) is critical to assess whether the timing of high pollution events is reproduced, even if absolute magnitudes are biased.
+	\item \textbf{Ozone (O$_3$)}: MNMB is preferred due to strong seasonal variability and high concentration ranges \cite{de2025new}.
+	\item \textbf{Particulate matter (PM$_{10}$, PM$_{2.5}$)}: FGE and MFE are often used to capture proportional errors in urban vs. rural sites\cite{de2025new}.
+	\item \textbf{Episode detection (peaks)}: Correlation (Pearson, Spearman) is critical to assess whether the timing of high pollution events is reproduced, even if absolute magnitudes are biased\cite{de2025new}.
 \end{itemize}
 
 \paragraph{Limitations:}
@@ -183,7 +183,8 @@ Although these metrics overcome some drawbacks of standard scores, they are not 
 
 The forecasts produced by CAMS are made accessible through a variety of platforms, each targeting different audiences and offering distinct levels of complexity. These platforms range from highly intuitive, user-oriented interfaces to scientific portals that require expert knowledge. Understanding their functionalities and limitations is essential to identify the gaps that motivate the development of new visualization tools.
 
-One of the most popular public-facing platforms is \textbf{Windy.com}\footnote{\href{https://www.windy.com}{https://www.windy.com}}, which integrates CAMS data into its interactive global weather maps. Windy is widely used due to its highly visual interface: users can navigate the globe, zoom into regions of interest, and overlay layers of air pollutants such as PM$_{2.5}$, NO$_2$, or O$_3$. This makes it an effective tool for raising awareness among the general public. However, Windy focuses on visualization rather than analysis: it does not provide access to underlying numerical values or allow generation of graphs directly. Therefore, while it excels in accessibility and interactivity, it is limited for scientific or technical work (Figure~\ref{fig:windy}).
+One of the most popular public-facing platforms is \textbf{Windy.com}\footnote{https://www.windy.com}
+, which integrates CAMS data into its interactive global weather maps. Windy is widely used due to its highly visual interface: users can navigate the globe, zoom into regions of interest, and overlay layers of air pollutants such as PM$_{2.5}$, NO$_2$, or O$_3$. A useful feature of the platform is the temporal navigation, which allows users to move through forecast time steps with a slider or to play them dynamically using an animation button. This makes it an effective tool for raising awareness among the general public. However, Windy focuses on visualization rather than analysis: it does not provide access to underlying numerical values, does not allow the generation of graphs, and does not offer options to download the data directly. Therefore, while it excels in accessibility and interactivity, it is limited for scientific or technical work (Figure~\ref{fig:windy}).
 
 \begin{figure}[h!btp]
 	\centering
@@ -192,7 +193,7 @@ One of the most popular public-facing platforms is \textbf{Windy.com}\footnote{\
 	\label{fig:windy}
 \end{figure}
 
-At the other end of the spectrum, the \textbf{CAMS Atmosphere Data Store (ADS)}\footnote{\href{https://ads.atmosphere.copernicus.eu/}{https://ads.atmosphere.copernicus.eu/}} provides full access to forecast datasets in scientific formats such as NetCDF and GRIB. Through ADS, expert users can download multi-day, hourly predictions of pollutants, meteorological variables, and greenhouse gases at global or regional scales. This platform offers maximum flexibility and scientific robustness, but requires specialized knowledge of data processing tools (Python, R, GIS software). For many non-experts, this represents a significant barrier. To illustrate, Figure~\ref{fig:ads} shows the ADS interface alongside a capture of the installation instructions for the CDS API, demonstrating the technical steps required to access the data programmatically.
+At the other end of the spectrum, the \textbf{CAMS Atmosphere Data Store (ADS)}\footnote{{https://ads.atmosphere.copernicus.eu/}} provides full access to forecast datasets in scientific formats such as NetCDF and GRIB. Through ADS, expert users can download multi-day, hourly predictions of pollutants, meteorological variables, and greenhouse gases at global or regional scales. This platform offers maximum flexibility and scientific robustness, but requires specialized knowledge of data processing tools (Python, R, GIS software). For many non-experts, this represents a significant barrier. To illustrate, Figure~\ref{fig:ads} shows the ADS interface alongside a capture of the installation instructions for the CDS API, demonstrating the technical steps required to access the data programmatically.
 
 \begin{figure}[h!btp]
 	\centering
@@ -208,7 +209,7 @@ At the other end of the spectrum, the \textbf{CAMS Atmosphere Data Store (ADS)}\
 	\label{fig:ads2}
 \end{figure}
 
-Between these extremes, the \textbf{CAMS Regional Air Quality Viewer}\footnote{\href{https://atmosphere.copernicus.eu/european-air-quality-forecast-plots}{https://atmosphere.copernicus.eu/european-air-quality-forecast-plots}} is designed specifically to display European forecasts with higher spatial resolution (5–10 km). It presents interactive maps for pollutants such as ozone, nitrogen dioxide, and particulate matter. Unlike ADS, this platform allows users to visualize pollutant distributions graphically, including plots of predicted values over time. However, users cannot extract raw numerical data directly from the graphs, limiting its usefulness for advanced analysis (Figures~\ref{fig:regional-map} and \ref{fig:regional-graph}).
+Between these extremes, the \textbf{CAMS Regional Air Quality Viewer}\footnote{{https://atmosphere.copernicus.eu/european-air-quality-forecast-plots}} is designed specifically to display European forecasts with higher spatial resolution (5–10 km). It presents interactive maps for pollutants such as ozone, nitrogen dioxide, and particulate matter. Unlike ADS, this platform allows users to visualize pollutant distributions graphically, including plots of predicted values over time. However, users cannot extract raw numerical data directly from the graphs, limiting its usefulness for advanced analysis (Figures~\ref{fig:regional-map} and \ref{fig:regional-graph}).
 
 \begin{figure}[h!btp]
 	\centering
@@ -224,14 +225,12 @@ Between these extremes, the \textbf{CAMS Regional Air Quality Viewer}\footnote{\
 	\label{fig:regional-graph}
 \end{figure}
 
-In addition to forecast-oriented services, \textbf{OpenAQ} plays an important complementary role by aggregating real-time observational data from thousands of monitoring stations worldwide. Unlike CAMS platforms, OpenAQ focuses on measurements rather than modeled forecasts, making it particularly valuable for validation purposes. Researchers and developers can access its open API to retrieve raw observations, enabling integration into independent applications. While it does not provide predictive capability, OpenAQ exemplifies how open data platforms can foster transparency and community engagement.
-
 In summary, existing platforms present a clear trade-off between usability and scientific depth. Public-facing tools like Windy.com offer engaging visualizations but little analytical flexibility, while scientific portals such as ADS provide full datasets at the expense of accessibility. Intermediate solutions, like the CAMS Regional Viewer, address part of this gap but remain limited in interactivity. This fragmentation highlights the need for tools that are at once scientifically robust and user-friendly, providing accessible, interactive ways to explore CAMS data without requiring advanced technical expertise.
 
 
 
 \section{Challenges and Open Gaps}
 
-I decided to develop my own platform for air quality forecasting because existing tools, although comprehensive, do not offer the flexibility needed to visualize information interactively and customize it according to specific regions and pollutants. Traditional platforms often provide static maps or pre-determined reports, whereas this application allows users to select different regions, choose specific pollutants, and observe their hourly variations through a slider, complemented by historical time-series charts. The integration of WMS layers and dynamic map visualization enables a more intuitive experience, allowing users to explore data in real time and obtain precise information by clicking on a given location. This approach contrasts with previous systems, which typically limit interactivity and do not allow combining visualizations from multiple sources dynamically. By developing this platform, the goal was to merge data accuracy with usability and analytical capability, resulting in a tool that is both accessible and versatile for public, academic, or environmental monitoring purposes.
+The development of a new platform for air quality forecasting was motivated by the limitations of existing tools, which, although comprehensive, lack the flexibility required for interactive visualization and customization according to specific regions and pollutants. Traditional platforms often provide static maps or pre-determined reports, whereas this application allows users to select different regions, choose specific pollutants, and observe their hourly variations through a slider, complemented by historical time-series charts. The integration of WMS layers and dynamic map visualization enables a more intuitive experience, allowing users to explore data in real time and obtain precise information by clicking on a given location. Inspired by the accessibility of platforms such as Windy, the system extends functionality by enabling the generation of graphs similar to those available in the CAMS Regional Service, and by offering data download options as in the Atmosphere Data Store (ADS), but without the need for any prior installation. This approach contrasts with previous systems, which typically limit interactivity and do not allow to download the data. The aim of developing this platform is therefore to merge data accuracy with usability and analytical capability, resulting in a tool that is both accessible and versatile for public, academic, or environmental monitoring purposes.
 
 Overall, existing tools successfully deliver high-quality air quality forecasts but exhibit trade-offs between usability and analytical depth. This motivates the creation of a new visualization platform that bridges this gap, offering a scientifically robust, interactive, and user-centered interface that facilitates exploration, comparison, and interpretation of atmospheric data.
